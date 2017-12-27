@@ -14,7 +14,9 @@
     "logoFile": "",
     "screenshots": [],
     "dependencies": [
-      ""
+	  "gamestages",
+	  "crafttweaker",
+	  "immersiveengineering"
     ]
   }
 ]
