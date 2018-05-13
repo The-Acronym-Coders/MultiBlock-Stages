@@ -1,7 +1,24 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
 # gradle
 build
 .gradle
 
 # other
+eclipse
 run
-libs
+
+libs/Thaumcraft-1\.12\.2-6\.1\.BETA13-deobf\.jar
