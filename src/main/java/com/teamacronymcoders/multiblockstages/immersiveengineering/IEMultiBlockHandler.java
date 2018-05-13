@@ -4,7 +4,7 @@ import blusunrize.immersiveengineering.api.MultiblockHandler.IMultiblock;
 import blusunrize.immersiveengineering.api.MultiblockHandler.MultiblockFormEvent;
 import com.google.common.collect.Maps;
 import com.teamacronymcoders.multiblockstages.MultiBlockStage;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler;
+import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -28,7 +28,7 @@ public class IEMultiBlockHandler {
         EntityPlayer entityPlayer = multiblockFormEvent.getEntityPlayer();
         if (multiBlockStages.containsKey(multiblock.getUniqueName())) {
             MultiBlockStage stage = multiBlockStages.get(multiblock.getUniqueName());
-            if (!PlayerDataHandler.getStageData(entityPlayer).hasUnlockedStage(stage.getGameStage())) {
+            if (GameStageHelper.hasStage(entityPlayer, stage.getGameStage())) {
                 multiblockFormEvent.setCanceled(true);
                 if (entityPlayer.getEntityWorld().isRemote) {
                     entityPlayer.sendStatusMessage(new TextComponentString(stage.getFailureMessage()), false);
