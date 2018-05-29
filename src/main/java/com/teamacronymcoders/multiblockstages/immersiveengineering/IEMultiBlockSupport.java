@@ -4,7 +4,6 @@ import blusunrize.immersiveengineering.api.MultiblockHandler;
 import blusunrize.immersiveengineering.api.MultiblockHandler.IMultiblock;
 import com.teamacronymcoders.multiblockstages.MultiBlockCommand;
 import com.teamacronymcoders.multiblockstages.MultiBlockStage;
-import crafttweaker.CraftTweakerAPI;
 import crafttweaker.mc1120.commands.CTChatCommand;
 import net.minecraftforge.common.MinecraftForge;
 
