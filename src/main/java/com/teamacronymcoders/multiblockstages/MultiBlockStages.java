@@ -13,7 +13,7 @@ public class MultiBlockStages {
     public static final String MOD_ID = "multiblockstages";
     public static final String MOD_NAME = "MultiBlock Stages";
     public static final String VERSION = "@VERSION@";
-    public static final String DEPENDS = "required-after:gamestages;after:immersiveengineering";
+    public static final String DEPENDS = "required-after:gamestages@[2.0.0,);after:immersiveengineering";
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
