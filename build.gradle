@@ -23,6 +23,9 @@ minecraft {
     runDir = "run"
 
     mappings = project.mcpVersion
+
+    replace "@VERSION@", project.version
+    replaceIn "MultiBlockStages.java"
 }
 
 repositories {

@@ -12,7 +12,7 @@ import static com.teamacronymcoders.multiblockstages.MultiBlockStages.*;
 public class MultiBlockStages {
     public static final String MOD_ID = "multiblockstages";
     public static final String MOD_NAME = "MultiBlock Stages";
-    public static final String VERSION = "1.0-SNAPSHOT";
+    public static final String VERSION = "@VERSION@";
     public static final String DEPENDS = "required-after:gamestages;after:immersiveengineering";
 
     @EventHandler
