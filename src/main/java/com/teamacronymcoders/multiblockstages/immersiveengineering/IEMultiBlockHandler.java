@@ -28,7 +28,7 @@ public class IEMultiBlockHandler {
         EntityPlayer entityPlayer = multiblockFormEvent.getEntityPlayer();
         if (multiBlockStages.containsKey(multiblock.getUniqueName())) {
             MultiBlockStage stage = multiBlockStages.get(multiblock.getUniqueName());
-            if (GameStageHelper.hasStage(entityPlayer, stage.getGameStage())) {
+            if (!GameStageHelper.hasStage(entityPlayer, stage.getGameStage())) {
                 multiblockFormEvent.setCanceled(true);
                 if (entityPlayer.getEntityWorld().isRemote) {
                     entityPlayer.sendStatusMessage(new TextComponentString(stage.getFailureMessage()), false);
