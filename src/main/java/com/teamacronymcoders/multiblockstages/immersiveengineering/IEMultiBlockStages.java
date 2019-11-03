@@ -1,6 +1,5 @@
 package com.teamacronymcoders.multiblockstages.immersiveengineering;
 
-import blusunrize.immersiveengineering.api.MultiblockHandler;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ModOnly;
 import crafttweaker.annotations.ZenRegister;

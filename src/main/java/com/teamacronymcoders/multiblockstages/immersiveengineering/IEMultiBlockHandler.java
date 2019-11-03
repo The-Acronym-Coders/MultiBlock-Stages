@@ -23,7 +23,7 @@ public class IEMultiBlockHandler {
     }
 
     @SubscribeEvent
-    public void multiBlockForm(MultiblockFormEvent multiblockFormEvent) {
+    public void multiBlockForm(MultiblockFormEvent.Post multiblockFormEvent) {
         IMultiblock multiblock = multiblockFormEvent.getMultiblock();
         EntityPlayer entityPlayer = multiblockFormEvent.getEntityPlayer();
         if (multiBlockStages.containsKey(multiblock.getUniqueName())) {
@@ -31,7 +31,7 @@ public class IEMultiBlockHandler {
             if (!GameStageHelper.hasStage(entityPlayer, stage.getGameStage())) {
                 multiblockFormEvent.setCanceled(true);
                 if (entityPlayer.getEntityWorld().isRemote) {
-                    entityPlayer.sendStatusMessage(new TextComponentString(stage.getFailureMessage()), false);
+                    entityPlayer.sendStatusMessage(new TextComponentString(stage.getFailureMessage()), true);
                 }
             }
         }

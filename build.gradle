@@ -70,6 +70,14 @@ processResources {
     }
 }
 
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://" + (System.getenv("local_maven") != null ? System.getenv("local_maven") : System.getenv("bamboo_local_maven")))
+        }
+    }
+}
+
 String getVersion() {
     String version = modVersion
     String branch = project.hasProperty("branch") ? project.branch : ""
