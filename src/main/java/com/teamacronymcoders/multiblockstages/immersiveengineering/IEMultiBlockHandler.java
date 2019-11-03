@@ -23,7 +23,7 @@ public class IEMultiBlockHandler {
     }
 
     @SubscribeEvent
-    public void multiBlockForm(MultiblockFormEvent multiblockFormEvent) {
+    public void multiBlockForm(MultiblockFormEvent.Post multiblockFormEvent) {
         IMultiblock multiblock = multiblockFormEvent.getMultiblock();
         EntityPlayer entityPlayer = multiblockFormEvent.getEntityPlayer();
         if (multiBlockStages.containsKey(multiblock.getUniqueName())) {
