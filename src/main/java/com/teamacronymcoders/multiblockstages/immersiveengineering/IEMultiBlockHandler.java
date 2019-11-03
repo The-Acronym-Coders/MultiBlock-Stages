@@ -31,7 +31,7 @@ public class IEMultiBlockHandler {
             if (!GameStageHelper.hasStage(entityPlayer, stage.getGameStage())) {
                 multiblockFormEvent.setCanceled(true);
                 if (entityPlayer.getEntityWorld().isRemote) {
-                    entityPlayer.sendStatusMessage(new TextComponentString(stage.getFailureMessage()), false);
+                    entityPlayer.sendStatusMessage(new TextComponentString(stage.getFailureMessage()), true);
                 }
             }
         }
