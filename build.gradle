@@ -1,72 +1,116 @@
 buildscript {
     repositories {
-        jcenter()
-        maven {
-            name = "forge"
-            url = "https://files.minecraftforge.net/maven"
-        }
+        maven { url = 'https://maven.minecraftforge.net' }
+        mavenCentral()
     }
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
     }
 }
-
-apply plugin: "net.minecraftforge.gradle.forge"
+apply plugin: 'net.minecraftforge.gradle'
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: "maven"
 
 version = getVersion()
-group = modGroup
-archivesBaseName = modBaseName
+group = "${modGroup}"
+archivesBaseName = "${modBaseName}"
 
+java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
+
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    version = project.forgeVersion
-    runDir = "run"
+    mappings  channel: "${mcp_channel}", version: "${mcp_mappings}"
 
-    mappings = project.mcpVersion
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            workingDirectory project.file('run')
 
-    replace "@VERSION@", project.version
-    replaceIn "MultiBlockStages.java"
+            // Recommended logging data for a userdev environment
+            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.disableRefMap', 'true'
+
+            mods {
+                multiblockstages {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.disableRefMap', 'true'
+
+            mods {
+                multiblockstages {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.disableRefMap', 'true'
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            args '--mod', 'multiblockstages', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+            mods {
+                multiblockstages {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 repositories {
     mavenCentral()
     maven {
         name "IE/CraftTweaker"
-        url "http://maven.teamacronymcoders.com"
+        url "https://maven.teamacronymcoders.com"
     }
     maven {
         name "GameStages"
-        url "https://maven.mcmoddev.com"
+        url "https://maven.blamejared.com"
     }
 }
 
 dependencies {
-    deobfCompile("blusunrize:ImmersiveEngineering:${ieVersion}") {
-        exclude module: "crafttweaker"
-    }
-    deobfCompile("net.darkhax.gamestages:GameStages-1.12.2:${gameStageVersion}") {
-        exclude module: "crafttweaker"
-    }
-    deobfCompile "net.darkhax.bookshelf:Bookshelf-1.12.2:${bookShelfVersion}"
-    deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:${crafttweakerVersion}"
+    minecraft "net.minecraftforge:forge:${forgeVersion}"
+    compile fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:${bookShelfVersion}")
+    compile fg.deobf("net.darkhax.gamestages:GameStages-1.16.5:${gameStageVersion}")
+    compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.5:${crafttweakerVersion}")
+    compile fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-${ieVersion}")
 }
 
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
-
-        // replace version and mcversion
-        expand "version": project.version, "mcversion": project.minecraft.version
-    }
-
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
+jar {
+    manifest {
+        attributes([
+                'Specification-Title': "${title}",
+                'Specification-Vendor': "${team}",
+                'Specification-Version': "${version}",
+                "Implementation-Title": project.name,
+                'Implementation-Version': "${modVersion}",
+                'Implementation-Vendor' :"${team}",
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
     }
 }
 

@@ -1,37 +1,36 @@
 package com.teamacronymcoders.multiblockstages;
 
-import crafttweaker.CraftTweakerAPI;
-import crafttweaker.mc1120.commands.CTChatCommand;
-import crafttweaker.mc1120.commands.CraftTweakerCommand;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.server.MinecraftServer;
+import blusunrize.immersiveengineering.api.multiblocks.MultiblockHandler;
+import blusunrize.immersiveengineering.api.multiblocks.MultiblockHandler.IMultiblock;
+import com.blamejared.crafttweaker.api.CraftTweakerAPI;
+import com.blamejared.crafttweaker.impl.commands.CTCommandCollectionEvent;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static crafttweaker.mc1120.commands.SpecialMessagesChat.getClickableCommandText;
-import static crafttweaker.mc1120.commands.SpecialMessagesChat.getLinkToCraftTweakerLog;
-import static crafttweaker.mc1120.commands.SpecialMessagesChat.getNormalMessage;
+public class MultiBlockCommand {
+	@SubscribeEvent
+	public static void addDumpCommands(CTCommandCollectionEvent event) {
+		event.registerDump("ieMultiblocks", "Outputs a list of all Immersive Engineering multiblock names to the log.", context -> {
+			CraftTweakerAPI.logDump("ieMultiblocks" + ":");
+			List<ResourceLocation> multiBlockList = getMultiBlockNames();
+			for (ResourceLocation name : multiBlockList) {
+				CraftTweakerAPI.logDump(name.toString());
+			}
+			final StringTextComponent message = new StringTextComponent(TextFormatting.GREEN + "IE Multiblock list generated! Check the crafttweaker.log file!" + TextFormatting.RESET);
+			context.getSource().sendFeedback(message, false);
 
-public abstract class MultiBlockCommand extends CraftTweakerCommand {
-    public MultiBlockCommand(String setName) {
-        super(setName + "MultiBlocks");
-    }
+			return 0;
+		});
+	}
 
-    @Override
-    protected void init() {
-        setDescription(getClickableCommandText("\u00A72/ct " + subCommandName, "/ct " + subCommandName, true),
-                getNormalMessage(" \u00A73Outputs a list of all " + subCommandName + "names in the game to the crafttweaker.log"));
-    }
-
-    @Override
-    public void executeCommand(MinecraftServer server, ICommandSender sender, String[] args) {
-        CraftTweakerAPI.logCommand(subCommandName + ":");
-        List<String> multiBlockList = getMultiBlockNames();
-        for (String name : multiBlockList) {
-            CraftTweakerAPI.logCommand(name);
-        }
-        sender.sendMessage(getLinkToCraftTweakerLog("List of " + subCommandName + " generated;", sender));
-    }
-
-    public abstract List<String> getMultiBlockNames();
+    public static List<ResourceLocation> getMultiBlockNames() {
+		return MultiblockHandler.getMultiblocks().stream()
+				.map(IMultiblock::getUniqueName)
+				.collect(Collectors.toList());
+	};
 }

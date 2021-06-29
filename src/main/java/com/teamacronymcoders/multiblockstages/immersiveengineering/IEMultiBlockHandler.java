@@ -1,38 +1,39 @@
 package com.teamacronymcoders.multiblockstages.immersiveengineering;
 
-import blusunrize.immersiveengineering.api.MultiblockHandler.IMultiblock;
-import blusunrize.immersiveengineering.api.MultiblockHandler.MultiblockFormEvent;
+import blusunrize.immersiveengineering.api.multiblocks.MultiblockHandler.IMultiblock;
+import blusunrize.immersiveengineering.api.multiblocks.MultiblockHandler.MultiblockFormEvent;
 import com.google.common.collect.Maps;
 import com.teamacronymcoders.multiblockstages.MultiBlockStage;
 import net.darkhax.gamestages.GameStageHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Map;
 
 public class IEMultiBlockHandler {
-    private Map<String, MultiBlockStage> multiBlockStages;
+    private Map<ResourceLocation, MultiBlockStage> multiBlockStages;
 
     public IEMultiBlockHandler() {
         multiBlockStages = Maps.newHashMap();
     }
 
     public void addMultiBlockStage(MultiBlockStage multiBlockStage) {
-        multiBlockStages.put(multiBlockStage.getMultiBlockName(),  multiBlockStage);
+        multiBlockStages.put(multiBlockStage.getMultiBlockLocation(),  multiBlockStage);
     }
 
     @SubscribeEvent
-    public void multiBlockForm(MultiblockFormEvent.Post multiblockFormEvent) {
+    public void multiBlockForm(MultiblockFormEvent multiblockFormEvent) {
         IMultiblock multiblock = multiblockFormEvent.getMultiblock();
-        EntityPlayer entityPlayer = multiblockFormEvent.getEntityPlayer();
+        PlayerEntity entityPlayer = multiblockFormEvent.getPlayer();
+        MultiBlockStage stage = multiBlockStages.get(multiblock.getUniqueName());
         if (multiBlockStages.containsKey(multiblock.getUniqueName())) {
-            MultiBlockStage stage = multiBlockStages.get(multiblock.getUniqueName());
             if (!GameStageHelper.hasStage(entityPlayer, stage.getGameStage())) {
-                multiblockFormEvent.setCanceled(true);
                 if (entityPlayer.getEntityWorld().isRemote) {
-                    entityPlayer.sendStatusMessage(new TextComponentString(stage.getFailureMessage()), true);
+                    entityPlayer.sendStatusMessage(new StringTextComponent(stage.getFailureMessage()), true);
                 }
+                multiblockFormEvent.setCanceled(true);
             }
         }
     }

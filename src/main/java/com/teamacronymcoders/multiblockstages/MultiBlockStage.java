@@ -1,13 +1,15 @@
 package com.teamacronymcoders.multiblockstages;
 
+import net.minecraft.util.ResourceLocation;
+
 public class MultiBlockStage {
     private final String gameStage;
-    private final String multiBlockName;
+    private final ResourceLocation multiBlockLocation;
     private final String failureMessage;
 
-    public MultiBlockStage(String gameStage, String multiBlockName, String failureMessage) {
+    public MultiBlockStage(String gameStage, ResourceLocation multiBlockLocation, String failureMessage) {
         this.gameStage = gameStage;
-        this.multiBlockName = multiBlockName;
+        this.multiBlockLocation = multiBlockLocation;
         this.failureMessage = failureMessage;
     }
 
@@ -15,8 +17,8 @@ public class MultiBlockStage {
         return gameStage;
     }
 
-    public String getMultiBlockName() {
-        return multiBlockName;
+    public ResourceLocation getMultiBlockLocation() {
+        return multiBlockLocation;
     }
 
     public String getFailureMessage() {

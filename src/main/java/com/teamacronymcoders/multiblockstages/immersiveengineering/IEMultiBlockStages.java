@@ -1,22 +1,21 @@
 package com.teamacronymcoders.multiblockstages.immersiveengineering;
 
-import crafttweaker.CraftTweakerAPI;
-import crafttweaker.annotations.ModOnly;
-import crafttweaker.annotations.ZenRegister;
-import stanhebben.zenscript.annotations.ZenClass;
-import stanhebben.zenscript.annotations.ZenMethod;
+import com.blamejared.crafttweaker.api.CraftTweakerAPI;
+import com.blamejared.crafttweaker.api.annotations.ZenRegister;
+import net.minecraft.util.ResourceLocation;
+import org.openzen.zencode.java.ZenCodeType.Method;
+import org.openzen.zencode.java.ZenCodeType.Name;
 
-@ZenRegister
-@ModOnly("immersiveengineering")
-@ZenClass("mods.multiblockstages.IEMultiBlockStages")
+@ZenRegister(modDeps = {"immersiveengineering"})
+@Name("mods.multiblockstages.IEMultiBlockStages")
 public class IEMultiBlockStages {
-    @ZenMethod
-    public static void addStage(String stage, String multiBlockName) {
+    @Method
+    public static void addStage(String stage, ResourceLocation multiBlockName) {
         CraftTweakerAPI.apply(new ActionAddIEMultiBlockStage(stage, multiBlockName));
     }
 
-    @ZenMethod
-    public static void addStage(String stage, String multiBlockName, String failureMessage) {
+    @Method
+    public static void addStage(String stage, ResourceLocation multiBlockName, String failureMessage) {
         CraftTweakerAPI.apply(new ActionAddIEMultiBlockStage(stage, multiBlockName, failureMessage));
     }
 }
