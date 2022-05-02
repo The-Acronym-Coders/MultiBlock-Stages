@@ -1,8 +1,8 @@
 package com.teamacronymcoders.multiblockstages.immersiveengineering;
 
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
-import net.minecraft.util.ResourceLocation;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import net.minecraft.resources.ResourceLocation;
 import org.openzen.zencode.java.ZenCodeType.Method;
 import org.openzen.zencode.java.ZenCodeType.Name;
 
