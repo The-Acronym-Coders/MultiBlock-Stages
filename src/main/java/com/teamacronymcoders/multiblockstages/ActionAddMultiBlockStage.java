@@ -1,9 +1,9 @@
 package com.teamacronymcoders.multiblockstages;
 
-import com.blamejared.crafttweaker.api.actions.IRuntimeAction;
+import com.blamejared.crafttweaker.api.action.base.IRuntimeAction;
+import com.blamejared.crafttweaker.api.zencode.IScriptLoadSource;
 import com.google.common.base.Strings;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.LogicalSide;
+import net.minecraft.resources.ResourceLocation;
 
 public abstract class ActionAddMultiBlockStage implements IRuntimeAction {
     private final String gameStage;
@@ -24,7 +24,7 @@ public abstract class ActionAddMultiBlockStage implements IRuntimeAction {
      * Decides which side the action should be applied on. Returning true makes sure the client and server both know.
      */
     @Override
-    public boolean shouldApplyOn(LogicalSide side) {
+    public boolean shouldApplyOn(IScriptLoadSource source) {
         return true;
     }
 

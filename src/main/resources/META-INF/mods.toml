@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[36,)"
+loaderVersion="[40,)"
 issueTrackerURL="https://github.com/The-Acronym-Coders/MultiBlock-Stages/issues"
 license="MIT"
 
@@ -13,20 +13,20 @@ description='''GameStages support for MultiBlocks'''
 [[dependencies.multiblockstages]]
 modId="gamestages"
 mandatory=true
-versionRange="[7.1.6,)"
+versionRange="[8.0.1,)"
 ordering="AFTER"
 side="BOTH"
 
 [[dependencies.multiblockstages]]
 modId="crafttweaker"
 mandatory=true
-versionRange="[7.1,)"
+versionRange="[9.1,)"
 ordering="AFTER"
 side="BOTH"
 
 [[dependencies.multiblockstages]]
 modId="immersiveengineering"
 mandatory=true
-versionRange="[1.16.5-4.2.4-134,)"
+versionRange="[1.18.2-8.0.1-147,)"
 ordering="AFTER"
 side="BOTH"

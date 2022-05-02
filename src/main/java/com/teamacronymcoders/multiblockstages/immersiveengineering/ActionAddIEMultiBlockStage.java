@@ -2,7 +2,7 @@ package com.teamacronymcoders.multiblockstages.immersiveengineering;
 
 import com.teamacronymcoders.multiblockstages.ActionAddMultiBlockStage;
 import com.teamacronymcoders.multiblockstages.MultiBlockStage;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class ActionAddIEMultiBlockStage extends ActionAddMultiBlockStage {
     public ActionAddIEMultiBlockStage(String stage, ResourceLocation multiBlockName) {

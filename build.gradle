@@ -4,18 +4,19 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: "maven"
+apply plugin: 'maven-publish'
 
 version = getVersion()
 group = "${modGroup}"
 archivesBaseName = "${modBaseName}"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
+// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -26,6 +27,8 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             // Recommended logging data for a userdev environment
             // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
@@ -43,6 +46,8 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             // Recommended logging data for a userdev environment
             // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
@@ -60,6 +65,8 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             // Recommended logging data for a userdev environment
             // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
@@ -81,7 +88,6 @@ minecraft {
 }
 
 repositories {
-    mavenCentral()
     maven {
         name "IE/CraftTweaker"
         url "https://maven.teamacronymcoders.com"
@@ -94,10 +100,11 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${forgeVersion}"
-    compile fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:${bookShelfVersion}")
-    compile fg.deobf("net.darkhax.gamestages:GameStages-1.16.5:${gameStageVersion}")
-    compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.5:${crafttweakerVersion}")
-    compile fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-${ieVersion}")
+
+    implementation fg.deobf("net.darkhax.bookshelf:Bookshelf-Forge-1.18.2:${bookShelfVersion}")
+    implementation fg.deobf("net.darkhax.gamestages:GameStages-Forge-1.18.2:${gameStageVersion}")
+    implementation fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-1.18.2:${crafttweakerVersion}")
+    implementation fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-${ieVersion}")
 }
 
 jar {
@@ -113,11 +120,25 @@ jar {
         ])
     }
 }
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
 
-uploadArchives {
+artifacts {
+    archives sourcesJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+            artifact sourcesJar
+        }
+    }
     repositories {
-        mavenDeployer {
-            repository(url: "file://" + (System.getenv("local_maven") != null ? System.getenv("local_maven") : System.getenv("bamboo_local_maven")))
+        maven {
+            url "file://" + (System.getenv("local_maven") != null ? System.getenv("local_maven") : System.getenv("bamboo_local_maven"))
         }
     }
 }

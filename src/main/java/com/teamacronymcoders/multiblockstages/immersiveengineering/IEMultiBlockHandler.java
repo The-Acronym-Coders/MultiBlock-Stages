@@ -5,9 +5,9 @@ import blusunrize.immersiveengineering.api.multiblocks.MultiblockHandler.Multibl
 import com.google.common.collect.Maps;
 import com.teamacronymcoders.multiblockstages.MultiBlockStage;
 import net.darkhax.gamestages.GameStageHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Map;
@@ -26,12 +26,12 @@ public class IEMultiBlockHandler {
     @SubscribeEvent
     public void multiBlockForm(MultiblockFormEvent multiblockFormEvent) {
         IMultiblock multiblock = multiblockFormEvent.getMultiblock();
-        PlayerEntity entityPlayer = multiblockFormEvent.getPlayer();
+        Player entityPlayer = multiblockFormEvent.getPlayer();
         MultiBlockStage stage = multiBlockStages.get(multiblock.getUniqueName());
         if (multiBlockStages.containsKey(multiblock.getUniqueName())) {
             if (!GameStageHelper.hasStage(entityPlayer, stage.getGameStage())) {
-                if (entityPlayer.getEntityWorld().isRemote) {
-                    entityPlayer.sendStatusMessage(new StringTextComponent(stage.getFailureMessage()), true);
+                if (entityPlayer.getCommandSenderWorld().isClientSide) {
+                    entityPlayer.displayClientMessage(new TextComponent(stage.getFailureMessage()), true);
                 }
                 multiblockFormEvent.setCanceled(true);
             }
